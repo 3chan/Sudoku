@@ -24,7 +24,7 @@ int main() {
   init();
 
   /* 問題の読み込み */
-  SaveProblem();
+  ReadProblem();
 
   /* 各行における1～9の並び方をあらかじめ調べる */
   SaveLinePattern();
@@ -33,7 +33,7 @@ int main() {
 }
 
 
-void SaveProblem() {
+void ReadProblem() {
   FILE *fp;
   char *fname = "test.txt";
   double temp1[9 * 9], temp2;
@@ -49,7 +49,7 @@ void SaveProblem() {
   j = 0;
   for (i = 0; i < (10 * 9); i++) {  // (一行9マス + 改行) * 9行
     temp2 = getc(fp);
-    if (i % 10 != 9) {
+    if (i % 10 != 9) {  // 改行は読まない (飛ばす)
       temp1[j] = temp2;
       j++;
     }

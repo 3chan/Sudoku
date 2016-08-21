@@ -3,7 +3,7 @@
 
 void init();
 
-void SaveProblem();
+void ReadProblem();
 void SaveLinePattern();
 
 #endif

@@ -35,7 +35,7 @@ int main() {
 
 void ReadProblem() {
   FILE *fp;
-  char *fname = "test.txt";
+  char *fname = "test2.txt";
   double temp1[9 * 9], temp2;
   int i, j, k;
   
@@ -84,6 +84,26 @@ void ReadProblem() {
 
 
 void SaveLinePattern() {
+  double prob[9][9];
+  int i, j,  k;
 
+  for (i = 0; i < 9; i++) {
+    for (j = 0; j < 9; j++) {
+    }
+    CopyProblem(prob);
+  }
+
+  return;
+}
+
+
+void CopyProblem(double prob[][9]) {
+  int i, j;
+
+  for (i = 0; i < 9; i++) {
+    for (j = 0; j < 9; j++) {
+      prob[i][j] = problem[i][j];
+    }
+  }
   return;
 }

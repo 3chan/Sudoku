@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "Sudoku.h"
 
 double problem[9][9];  // 問題を保存する配列。0: 空欄。1～9: 問題であらかじめ決められた値。
@@ -19,18 +20,29 @@ void init() {
 
 
 int main() {
+  /* 配列の初期化 */
+  init();
+
+  /* 問題の読み込み */
+  SaveProblem();
+
+  /* 各行における1～9の並び方をあらかじめ調べる */
+  SaveLinePattern();
+  
+  return 0;
+}
+
+
+void SaveProblem() {
   FILE *fp;
   char *fname = "test.txt";
   double temp1[9 * 9], temp2;
   int i, j, k;
-
-  /* 配列の初期化 */
-  init();
   
   /* ファイルオープン */
   if ((fp = fopen(fname, "r")) == NULL) {
     printf("Failed to open file \"%s\"\n", fname);
-    return -1;
+    exit(1);
   }
 
   /* ファイル読み込み */
@@ -63,10 +75,15 @@ int main() {
     for (j = 0; j < 9; j++) printf("%.0f  ", problem[i][j]);
     printf("\n");
   }
-      
 
   /* ファイルクローズ */
   fclose(fp);
    
-  return 0;
+  return;
+}
+
+
+void SaveLinePattern() {
+
+  return;
 }

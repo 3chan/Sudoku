@@ -22,7 +22,7 @@ int main() {
   FILE *fp;
   char *fname = "test.txt";
   double temp1[9 * 9], temp2;
-  int i, j;
+  int i, j, k;
 
   /* 配列の初期化 */
   init();
@@ -42,11 +42,28 @@ int main() {
       j++;
     }
   }
-
+  /* [デバッグ] 読み込んだファイルを出力
   for (i = 0; i < (9 * 9); i++) {
     printf("%.0f  ", temp1[i]);
     if (i % 9 == 8) printf("\n");
   }
+  */
+
+  /* 問題を配列に保存 */
+  k = 0;
+  for (i = 0; i < 9; i++) {
+    for (j = 0; j < 9; j++) {
+      problem[i][j] = temp1[k] - 48;  // 16進数から10進数に戻す処理
+      k++;
+    }
+  }
+
+  /* 問題を出力 */
+  for (i = 0; i < 9; i++) {
+    for (j = 0; j < 9; j++) printf("%.0f  ", problem[i][j]);
+    printf("\n");
+  }
+      
 
   /* ファイルクローズ */
   fclose(fp);

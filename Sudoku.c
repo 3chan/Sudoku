@@ -127,52 +127,24 @@ void SaveLinePattern() {
  
 void Combine1to9(double prob[], int line, int index) {
   int i = 1, j;
-  
-  while(1) {
-    /* デバッグ */
-    printf("i = %d, index = %d\n", i, index);
-    
-    if (i == 9) {
-      prob[index] = 0;  // 初期化
+  while (1) {
+    if (defalutNums[line][index] == 1) {
+      /* デバッグ */
+      printf("空マスではない\n");
+      
+      if (index < 8) Combine1to9(prob, line, index + 1);
+      else if (index == 8) {
+	/* 保存 */
+	for (j = 0; j < 9; j++) {
+	  linePattern[line][pcnt] = prob[j];
+	  pcnt++;
+	}
+      }
       return;
     }
-    else {
-      if (defaultNums[line][index] == 1) {
-	/* デバッグ */
-	printf("空マスではない\n");
-	if (index < 8) Combine1to9(prob, line, index + 1);
-	else if (index == 8) {
-	  /* 保存 */
-	  for (j = 0; j < 9; j++) {
-	    linePattern[line][pcnt] = prob[j];
-	    pcnt++;
-	  }
-	  return;
-	}
-	return;
-      }
-      else if (CheckDuplication(prob, i, index) == 0) {
-	/* デバッグ */
-	printf("重複なし\n");
-	prob[index] = i;
-	if (index == 8) {
-	  /* 保存 */
-	  for (j = 0; j < 9; j++) {
-	    linePattern[line][pcnt] = prob[j];
-	    pcnt++;
-	  }
-	  /* 表示 (デバッグ) */
-	  printf("prob = {");
-	  for (j = 0; j < 9; j++) printf("%.0f, ", prob[j]);
-	  printf("}\n");
-	}
-	else {
-	  Combine1to9(prob, line, index + 1);
-	}
-      }
-      i++;
-    }
-  }
+    while (CheckDuplication(prob, i, index) == 1) {
+      if (i == 9) {
+	
 }
 
 

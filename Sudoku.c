@@ -110,8 +110,9 @@ void SaveLinePattern() {
   printf("CopiedProblem: \n");
   PrintProblem(prob);
   printf("\n");
-  
-  Combine1to9(prob[1], 1, 0);  // ひとまず1行目のみ考える
+
+  pcnt = 0;
+  Combine1to9(prob[1], 0, 0);  // ひとまず1行目のみ考える
 
   /* 2行目以降はのちに実装
   for (i = 0; i < 9; i++) {
@@ -125,41 +126,65 @@ void SaveLinePattern() {
  
  
 void Combine1to9(double prob[], int line, int index) {
-  int i, j, k, l;
+  int i = 1, j;
+  
+  while(1) {
+    /* デバッグ */
+    printf("i = %d, index = %d\n", i, index);
+    
+    if (i == 9) {
+      prob[index] = 0;  // 初期化
+      return;
+    }
+    else {
+      if (defaultNums[line][index] == 1) {
+	/* デバッグ */
+	printf("空マスではない\n");
+	if (index < 8) Combine1to9(prob, line, index + 1);
+	else if (index == 8) {
+	  /* 保存 */
+	  for (j = 0; j < 9; j++) {
+	    linePattern[line][pcnt] = prob[j];
+	    pcnt++;
+	  }
+	  return;
+	}
+	return;
+      }
+      else if (CheckDuplication(prob, i, index) == 0) {
+	/* デバッグ */
+	printf("重複なし\n");
+	prob[index] = i;
+	if (index == 8) {
+	  /* 保存 */
+	  for (j = 0; j < 9; j++) {
+	    linePattern[line][pcnt] = prob[j];
+	    pcnt++;
+	  }
+	  /* 表示 (デバッグ) */
+	  printf("prob = {");
+	  for (j = 0; j < 9; j++) printf("%.0f, ", prob[j]);
+	  printf("}\n");
+	}
+	else {
+	  Combine1to9(prob, line, index + 1);
+	}
+      }
+      i++;
+    }
+  }
+}
 
-  if (defaultNums[line][index] == 1) {  // あらかじめ空欄でなければ飛ばす
-    index++;
-    Combine1to9(prob, line, index);
-  }
-  
+
+int CheckDuplication(double prob[], int num, int index) {  // 1: 重複あり、0: 重複なし
+  int i;
+
   for (i = 0; i < 9; i++) {
-    
-    for (j = 0; j < 9; j++) {  // 行内に既にその数字が無いか調べる
-      if (index != j && prob[j] == i) {
-	i++;
-	break;
-      }
-    }
-    
-    if (8 < i) return;
-    else if (index == 8) {  // パターンを保存
-      for (k = 0; k < 9; k++) {
-	linePattern[line][pcnt] = prob[k];
-	pcnt++;
-      }
-      /* デバッグ */
-      printf("prob = {");
-      for (l = 0; l < 9; l++) printf("%.0f, ", prob[l]);
-      printf("}  line = %d, index = %d, i = %d, pcnt = %d\n", line, index, i, pcnt);  // デバッグ
-    }
-    else if (index < 8) {
-      prob[index] = i;
-      index++;
-      Combine1to9(prob, line, index);
+    if (i != index) {  // 自分自身とは比較しない
+      if (num == prob[i]) return 1;
     }
   }
-  
-  return;
+  return 0;
 }
 
 

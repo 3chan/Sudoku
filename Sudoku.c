@@ -128,26 +128,63 @@ void SaveLinePattern() {
 void Combine1to9(double prob[], int line, int index) {
   int i = 1, j;
   while (1) {
-    if (defalutNums[line][index] == 1) {
+    if (defaultNums[line][index] == 1) {  // 空マスでないなら
       /* デバッグ */
       printf("空マスではない\n");
       
-      if (index < 8) Combine1to9(prob, line, index + 1);
-      else if (index == 8) {
+      if (index < 8) {  // 空マスでない、かつ右端ではないなら右隣のマスを調べる
+	Combine1to9(prob, line, index + 1);
+	if (index == 0) {
+	  /** 戻ってきたとき何しよう **/
+	}
+      }
+      else if (index == 8) {  // 空マスでない、かつ右端なら現在の並びを保存する
 	/* 保存 */
 	for (j = 0; j < 9; j++) {
 	  linePattern[line][pcnt] = prob[j];
 	  pcnt++;
 	}
       }
+      printf("戻ります(空マスでない, 右端かは関係なし)\n");
       return;
     }
-    while (CheckDuplication(prob, i, index) == 1) {
-      if (i == 9) {
-	
+    else {  // 空マスなら
+      while (CheckDuplication(prob, i, index) == 1) {  // 今入れようとしている数字と横ラインに数字の重複がある場合
+	if (i == 9) {  // 入れようとしている数字が9ならば
+	  // 重複がある、かつ数字が9、ならマスを空（初期化）して戻る（右端かどうかは関係ない。保存しないのだから）
+	  prob[index] = 0;
+	  printf("戻ります(空マス, 重複有, i = 9, 右端かは関係なし)\n");
+	  return;
+	}
+	else {  // 入れようとしている数字が1～8の場合
+	  i++;  // 調べる数をインクリメント
+	}
+      }
+      
+      // ここに来た == 入れようとしている数字と横ラインの数字に重複がない状態
+      printf("重複なし, index = %d,  i = %d", index, i);
+      prob[index] = i;  // 数字を入れる
+      if (index < 8) {  // 空マスに数字を入れた、かつ右端でないなら右隣を調べる
+	Combine1to9(prob, line, index + 1);
+	/** 戻ってきたとき何しよう **/
+      }
+      else if (index == 8) {  // 空マスに数字を入れた、かつ右端なら現在の並びを保存する
+	/* 保存 */
+	for (j = 0; j < 9; j++) {
+	  linePattern[line][pcnt] = prob[j];
+	  pcnt++;
+	}
+	printf("戻ります(空マスに数字を入れた, 重複なし, 右端である, i = %d)\n", i);
+	return;
+      }
+    }
+
+    // 空マスか否か + その内部の処理終えたらここに来る
+  }
+  // while を break で抜けたらここに来る
 }
-
-
+      
+      
 int CheckDuplication(double prob[], int num, int index) {  // 1: 重複あり、0: 重複なし
   int i;
 
